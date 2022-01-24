@@ -388,9 +388,10 @@
     })
 
     document.getElementById("copySVG").addEventListener("click", function(){
-      contents = document.getElementById("diagram").innerHTML;
-      console.log("contents", contents);
-      navigator.clipboard.writeText(contents);
+      // contents = document.getElementById("diagram").innerHTML;
+      // console.log("contents", contents);
+      // navigator.clipboard.writeText(contents);
+      svg.copySVG();
     })
 
 

@@ -455,6 +455,11 @@ class uSvg{
     return elementInfo.id;
   }
 
+  copySVG(){
+    let contents = this.svg.outerHTML;
+    navigator.clipboard.writeText(contents);
+  }
+
   addPolyline(pts=[new uPoint(0,0), new uPoint(2,3)], {style={}}={}){
     // pts is an array of uPoints
 
@@ -478,128 +483,6 @@ class uSvg{
 
   }
 
-  // addRightTriangle({pos = new uPoint(), a = 1, b = 1,
-  //   flip = "",
-  //   rotate = 0, //degrees
-  //   arc_r = 2,
-  //   show_A_angle=true,
-  //   show_B_angle=true,
-  //   A_angle_label= 'use_angle', // "α",
-  //   B_angle_label= 'use_angle', // "β",
-  //   angleLabelStyle = {},
-  //   show_a_side = true,
-  //   show_b_side = true,
-  //   show_c_side = true,  //hypothenuse
-  //   a_side_offset = new uPoint(-.5,0),
-  //   b_side_offset = new uPoint(0,-.5),
-  //   c_side_offset = new uPoint(.5, 0.5),
-  //   a_side_label = "use_length",
-  //   b_side_label = "use_length",
-  //   c_side_label = "use_length",
-  //   sideLabelStyle = {},
-  //   style={}} = {}){
-  //   //a is the vertical side length
-  //   //rotate is counterclockwise
-  //   // flip can be vertical ("v"), horizontal ("h"), or both ("vh")
-  //
-  //
-  //   let defaultStyle = {
-  //     fill:"none", stroke:"#000000",
-  //     "stroke-width": 2, points: "",
-  //     //"transform-origin": `${p.x} ${p.y}`
-  //   };
-  //   style = {...defaultStyle, ...style};
-  //
-  //   let defaultAngleLabelStyle = {
-  //     "text-anchor": "middle",
-  //     "dominant-baseline":"central",
-  //     "font-size": '0.75em'
-  //   };
-  //   angleLabelStyle = {...defaultAngleLabelStyle, ...angleLabelStyle};
-  //
-  //   let defaultSideLabelStyle = {
-  //     "text-anchor": "middle",
-  //     "dominant-baseline":"central",
-  //     //"font-size": '0.75em'
-  //   };
-  //   sideLabelStyle = {...defaultSideLabelStyle, ...sideLabelStyle};
-  //
-  //   //flip vertically or horizontally
-  //   a = /v/.test(flip) ? -a : a;
-  //   b = /h/.test(flip) ? -b : b;
-  //
-  //   let p = this.elemCoords(pos);
-  //   if (rotate != 0){
-  //     let t = `rotate(${-rotate}, ${p.x}, ${p.y})`;
-  //     style.transform = style.transform === undefined ? t : `${t} ${style.transform}`;
-  //   }
-  //
-  //   let p1 = pos;
-  //   let p2 = pos.addxy(0, a);
-  //   let p3 = pos.addxy(b, 0);
-  //
-  //   // draw triangle
-  //   let pts = [p1, p2, p3, p1];
-  //   let line = this.addPolyline(pts, {style});
-  //
-  //   let tri = new uRightTriangle(a, b);
-  //   tri.line = line;
-  //   //tri.vertices = [p1, p2, p3];
-  //
-  //   if (show_A_angle){
-  //     let arcA = this.addArcToVertex({
-  //       r: arc_r,
-  //       vertex: [p1, p2, p3],
-  //       angle_label: A_angle_label,
-  //       angleLabelStyle: angleLabelStyle
-  //     })
-  //   }
-  //   if (show_B_angle){
-  //     let arcB = this.addArcToVertex({
-  //       r: arc_r,
-  //       vertex: [p2, p3, p1],
-  //       angle_label: B_angle_label,
-  //       angleLabelStyle: angleLabelStyle
-  //     })
-  //   }
-  //
-  //   if (show_a_side){
-  //     a_side_label = (a_side_label === 'use_length') ? a : a_side_label;
-  //     this.labelLineSegment(p1, p2, a_side_label, a_side_offset, {style:sideLabelStyle});
-  //   }
-  //   if (show_b_side){
-  //     b_side_label = (b_side_label === 'use_length') ? b : b_side_label;
-  //     this.labelLineSegment(p1, p3, b_side_label, b_side_offset, {style:sideLabelStyle});
-  //   }
-  //   if (show_c_side){
-  //     this.labelLineSegment(p2, p3, c_side_label, c_side_offset, {style:sideLabelStyle});
-  //   }
-  //
-  //   return tri;
-  //
-  // }
-
-  // labelLineSegment(
-  //                   p1 = new uPoint(),
-  //                   p2 = new uPoint(1,0),
-  //                   {
-  //                     label="use_length",
-  //                     offset = new uPoint(0, 1),
-  //                     label_rounding = 1,
-  //                     style={}
-  //                   } = {}
-  //                 ){
-  //
-  //   if (label === 'use_length'){
-  //     let n = p1.distanceTo(p2).toFixed(label_rounding);
-  //     label = n%1 ? n : Math.round(n) ;
-  //   }
-  //
-  //   let txt = this.addText(label, p1.midpoint(p2).add(offset), {style:style});
-  //
-  //   return txt;
-  //
-  // }
 
   labelLineSegment(
                     segment = new uLineSegment(),
@@ -1497,8 +1380,7 @@ function getRightTriangle({
           theta = undefined,
           pos = new uPoint()
         } = {}){
-  console.log("arguments", arguments);
-
+  
   if (alpha !== undefined && a !== undefined){
     b = a * Math.tan(uRad(alpha));
     return new uRightTriangle(a, b, pos);
