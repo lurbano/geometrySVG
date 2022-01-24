@@ -3,8 +3,11 @@
   <head>
     <meta charset="utf-8">
     <title>Right Triangles SVG</title>
-    <script type="text/javascript" src="./uSvg-0.2.js"></script>
- 
+    <script type="text/javascript" src="./uSvg-0.3.js"></script>
+    <style media="screen">
+      input[type='number'] { width:5em;}
+    </style>
+
   </head>
   <body>
 
@@ -15,6 +18,7 @@
         let opp = 10;
         let theta = 30 * Math.PI / 180;
         let adj = opp/Math.tan(theta);
+        console.log(opp, adj);
         tri = new uRightTriangle(opp, adj, new uPoint(-7.5,-6));
 
         tri.draw(
@@ -36,32 +40,41 @@
     <div id="controls">
       <table>
         <tr>
-          <th></th><th></th><th>show</th><th>arc</th>
+          <th></th> <th>fix</th><th></th><th>show</th><th>arc</th>
         </tr>
 
         <tr>
           <td>Angle 1 (α): </td>
-          <td><input type="number" id="a1" value="">°</td>
-          <td><input type="checkbox" id="a1Show"> </td>
-          <td><input type="checkbox" id="a1Arc"> </td>
+          <td><input type="checkbox" id="alphaFix"> </td>
+          <td><input type="number" id="alpha" value="">°</td>
+          <td><input type="checkbox" id="alphaShow"> </td>
+          <td><input type="checkbox" id="alphaArc"> </td>
         </tr>
         <tr>
           <td>Angle 2 (θ):  </td>
-          <td><input type="number" id="a2" value="">°</td>
-          <td><input type="checkbox" id="a2Show"> </td>
-          <td><input type="checkbox" id="a2Arc"> </td>
+          <td><input type="checkbox" id="thetaFix"> </td>
+          <td><input type="number" id="theta" value="">°</td>
+          <td><input type="checkbox" id="thetaShow"> </td>
+          <td><input type="checkbox" id="thetaArc"> </td>
         </tr>
         <tr>
           <td>Length 1 (a):  </td>
-          <td><input type="number" id="len1" value=""><br></td>
-          <td><input type="checkbox" id="len1Show"> </td>
+          <td><input type="checkbox" id="aFix"> </td>
+          <td><input type="number" id="aLen" value=""><br></td>
+          <td><input type="checkbox" id="aLenShow"> </td>
         </tr>
         <tr>
           <td>Length 2 (b):  </td>
-          <td><input type="number" id="len2" value=""><br></td>
-          <td><input type="checkbox" id="len2Show"> </td>
+          <td><input type="checkbox" id="bFix"> </td>
+          <td><input type="number" id="bLen" value=""><br></td>
+          <td><input type="checkbox" id="bLenShow"> </td>
         </tr>
-
+        <tr>
+          <td>hypot. (c):  </td>
+          <td><input type="checkbox" id="cFix"> </td>
+          <td><input type="number" id="cLen" value=""><br></td>
+          <td><input type="checkbox" id="cLenShow"> </td>
+        </tr>
       </table>
 
 
@@ -95,52 +108,158 @@
   </body>
 
   <script type="text/javascript">
+
     function redraw(){
       tri.undraw();
       tri.draw(tri.svg, tri.drawArguments);
     }
+
+    function updateInputs(butNot){
+      if (butNot != 'alpha'){
+        document.getElementById('alpha').value = tri.angles[1].toPrecision(3);
+      }
+      if (butNot != 'theat'){
+        document.getElementById('theta').value = tri.angles[2].toPrecision(3);
+      }
+      if (butNot != 'aLen'){
+        document.getElementById('aLen').value = tri.lengths[0].toPrecision(3);
+      }
+      if (butNot != 'cLen'){
+        document.getElementById('cLen').value = tri.lengths[1].toPrecision(3);
+      }
+      if (butNot != 'bLen'){
+        document.getElementById('bLen').value = tri.lengths[2].toPrecision(3);
+      }
+    }
+    function getFixed(){
+      return {
+        alphaFix: document.getElementById('alphaFix').checked,
+        thetaFix: document.getElementById('thetaFix').checked,
+        aFix: document.getElementById('aFix').checked,
+        bFix: document.getElementById('bFix').checked,
+        cFix: document.getElementById('cFix').checked,
+      }
+    }
+
+
     //Inital Values
-    a1Div = document.getElementById("a1");
-    a1Div.value = tri.angles[1].toPrecision(3);
-    a2Div = document.getElementById("a2");
-    a2Div.value = tri.angles[2].toPrecision(3);
+    alphaDiv = document.getElementById("alpha");
+    alphaDiv.value = tri.angles[1].toPrecision(3);
+    thetaDiv = document.getElementById("theta");
+    thetaDiv.value = tri.angles[2].toPrecision(3);
 
-    document.getElementById("a1Show").checked = tri.drawArguments.showAngleLabels[1];
-    document.getElementById("a2Show").checked = tri.drawArguments.showAngleLabels[2];
-    document.getElementById("a1Arc").checked = tri.drawArguments.showAngleArcs[1];
-    document.getElementById("a2Arc").checked = tri.drawArguments.showAngleArcs[2];
+    document.getElementById("alphaShow").checked = tri.drawArguments.showAngleLabels[1];
+    document.getElementById("thetaShow").checked = tri.drawArguments.showAngleLabels[2];
+
+    document.getElementById("alphaArc").checked = tri.drawArguments.showAngleArcs[1];
+    document.getElementById("thetaArc").checked = tri.drawArguments.showAngleArcs[2];
 
 
-    len1Div = document.getElementById("len1");
-    len1Div.value = tri.lengths[1].toPrecision(3);
-    len2Div = document.getElementById("len2");
-    len2Div.value = tri.lengths[2].toPrecision(3);
-    document.getElementById("len1Show").checked = tri.drawArguments.labelSides[1];
-    document.getElementById("len2Show").checked = tri.drawArguments.labelSides[2];
+    aLenDiv = document.getElementById("aLen");
+    aLenDiv.value = tri.lengths[0].toPrecision(3);
+    bLenDiv = document.getElementById("bLen");
+    bLenDiv.value = tri.lengths[2].toPrecision(3);
+    cLenDiv = document.getElementById("cLen");
+    cLenDiv.value = tri.lengths[1].toPrecision(3);
+
+    document.getElementById("aLenShow").checked = tri.drawArguments.labelSides[0];
+    document.getElementById("bLenShow").checked = tri.drawArguments.labelSides[2];
+    document.getElementById("cLenShow").checked = tri.drawArguments.labelSides[1];
+
+
+
 
     //updates
-    document.getElementById("a1Show").addEventListener("change", function(){
+    document.getElementById("alpha").addEventListener("change", function(){
+      document.getElementById("thetaFix").checked = false;
+      oldtri = tri; tri.undraw();
+      fixed = getFixed();
+
+      if (fixed.aFix){
+        tri = getRightTriangle({
+          a: tri.a,
+          alpha: parseFloat(this.value),
+          pos: tri.pos
+        })
+      }
+      else if (fixed.bFix) {
+        tri = getRightTriangle({
+          b: tri.b,
+          alpha: parseFloat(this.value),
+          pos: tri.pos
+        })
+      }
+      else {
+        tri = getRightTriangle({
+          c: tri.c,
+          alpha: parseFloat(this.value),
+          pos: tri.pos
+        })
+      }
+      tri.draw(oldtri.svg, oldtri.drawArguments);
+      updateInputs(this.id);
+    })
+
+    document.getElementById("theta").addEventListener("change", function(){
+      document.getElementById("alphaFix").checked = false;
+      oldtri = tri; tri.undraw();
+      fixed = getFixed();
+      
+      if (fixed.aFix){
+        tri = getRightTriangle({
+          a: tri.a,
+          [this.id]: parseFloat(this.value),
+          pos: tri.pos
+        })
+      }
+      else if (fixed.bFix) {
+        tri = getRightTriangle({
+          b: tri.b,
+          [this.id]: parseFloat(this.value),
+          pos: tri.pos
+        })
+      }
+      else {
+        tri = getRightTriangle({
+          c: tri.c,
+          [this.id]: parseFloat(this.value),
+          pos: tri.pos
+        })
+        console.log(tri);
+      }
+      tri.draw(oldtri.svg, oldtri.drawArguments);
+      updateInputs(this.id);
+    })
+
+
+    document.getElementById("alphaShow").addEventListener("change", function(){
       tri.drawArguments.showAngleLabels[1] = this.checked;
       redraw();
     })
-    document.getElementById("a2Show").addEventListener("change", function(){
+    document.getElementById("thetaShow").addEventListener("change", function(){
       tri.drawArguments.showAngleLabels[2] = this.checked;
       redraw();
     })
-    document.getElementById("a1Arc").addEventListener("change", function(){
+
+    document.getElementById("alphaArc").addEventListener("change", function(){
       tri.drawArguments.showAngleArcs[1] = this.checked;
       redraw();
     })
-    document.getElementById("a2Arc").addEventListener("change", function(){
+    document.getElementById("thetaArc").addEventListener("change", function(){
       tri.drawArguments.showAngleArcs[2] = this.checked;
       redraw();
     })
-    document.getElementById("len1Show").addEventListener("change", function(){
-      tri.drawArguments.labelSides[1] = this.checked;
+
+    document.getElementById("aLenShow").addEventListener("change", function(){
+      tri.drawArguments.labelSides[0] = this.checked;
       redraw();
     })
-    document.getElementById("len2Show").addEventListener("change", function(){
+    document.getElementById("bLenShow").addEventListener("change", function(){
       tri.drawArguments.labelSides[2] = this.checked;
+      redraw();
+    })
+    document.getElementById("cLenShow").addEventListener("change", function(){
+      tri.drawArguments.labelSides[1] = this.checked;
       redraw();
     })
 

@@ -1388,7 +1388,7 @@ class uTriangle{
     this.polyline = svg.addPolyline(pts, {style:style});
 
     //draw angles
-    this.setVertices();
+    //this.setVertices();
     this.arcs = [];
     for (let i = 0; i < showAngleArcs.length; i++){
       if (showAngleArcs[i]){
@@ -1417,7 +1417,7 @@ class uTriangle{
     }
 
     //label sides
-    this.setLineSegments();
+    //this.setLineSegments();
     this.sideLabels = [];
     for (let i=0; i < labelSides.length; i++){
       if (labelSides[i]){
@@ -1479,18 +1479,48 @@ class uRightTriangle extends uTriangle{
 
     this.setPoints(p1, p2, p3);
 
-
-
   }
-  angle_a(deg=false){
-    let a = Math.asin(this.b/this.c);
-    if (deg){a = a * 180/Math.PI;}
-    return a;
+
+}
+
+function uRad(deg){ return deg * Math.PI / 180; }
+function uDeg(rad){ return rad * 180 / Math.PI; }
+
+function getRightTriangle({
+          a = undefined,
+          b = undefined,
+          c = undefined,
+          alpha = undefined,
+          theta = undefined,
+          pos = new uPoint()
+        } = {}){
+  console.log("arguments", arguments);
+
+  if (alpha !== undefined && a !== undefined){
+    b = a * Math.tan(uRad(alpha));
+    return new uRightTriangle(a, b, pos);
   }
-  angle_b(deg=false){
-    let b = Math.asin(this.a/this.c);
-    if (deg){b = b * 180/Math.PI;}
-    return b;
+  if (alpha !== undefined && b !== undefined){
+    a = b / Math.tan(uRad(alpha));
+    return new uRightTriangle(a, b, pos);
+  }
+  if (alpha !== undefined && c !== undefined){
+    a = c * Math.cos(uRad(alpha));
+    b = c * Math.sin(uRad(alpha));
+    return new uRightTriangle(a, b, pos);
+  }
+  if (theta !== undefined && a !== undefined){
+    b = a / Math.tan(uRad(theta));
+    return new uRightTriangle(a, b, pos);
+  }
+  if (theta !== undefined && b !== undefined){
+    a = b * Math.tan(uRad(theta));
+    return new uRightTriangle(a, b, pos);
+  }
+  if (theta !== undefined && c !== undefined){
+    a = c * Math.sin(uRad(theta));
+    b = c * Math.cos(uRad(theta));
+    return new uRightTriangle(a, b, pos);
   }
 
 }
