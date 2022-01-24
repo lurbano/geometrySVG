@@ -1479,6 +1479,9 @@ class uRightTriangle extends uTriangle{
 
     this.setPoints(p1, p2, p3);
 
+    this.alpha = this.angles[1];
+    this.theta = this.angles[2];
+
   }
 
 }
@@ -1522,5 +1525,19 @@ function getRightTriangle({
     b = c * Math.cos(uRad(theta));
     return new uRightTriangle(a, b, pos);
   }
+
+  if (a !== undefined && b !== undefined){
+    return new uRightTriangle(a, b, pos);
+  }
+  if (a !== undefined && c !== undefined){
+    let b = (c**2 - a**2)**0.5;
+    return new uRightTriangle(a, b, pos);
+  }
+  if (b !== undefined && c !== undefined){
+    let a = (c**2 - b**2)**0.5;
+    return new uRightTriangle(a, b, pos);
+  }
+
+
 
 }

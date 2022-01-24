@@ -40,7 +40,11 @@
     <div id="controls">
       <table>
         <tr>
-          <th></th> <th>fix</th><th></th><th>show</th><th>arc</th>
+          <th></th>
+          <th>fix</th>
+          <th></th>
+          <th>angle</th>
+          <th>arc</th>
         </tr>
 
         <tr>
@@ -173,7 +177,7 @@
     document.getElementById("alpha").addEventListener("change", function(){
       document.getElementById("thetaFix").checked = false;
       oldtri = tri; tri.undraw();
-      fixed = getFixed();
+      fixed = getFixed(this.id);
 
       if (fixed.aFix){
         tri = getRightTriangle({
@@ -203,8 +207,8 @@
     document.getElementById("theta").addEventListener("change", function(){
       document.getElementById("alphaFix").checked = false;
       oldtri = tri; tri.undraw();
-      fixed = getFixed();
-      
+      fixed = getFixed(this.id);
+
       if (fixed.aFix){
         tri = getRightTriangle({
           a: tri.a,
@@ -223,6 +227,123 @@
         tri = getRightTriangle({
           c: tri.c,
           [this.id]: parseFloat(this.value),
+          pos: tri.pos
+        })
+        console.log(tri);
+      }
+      tri.draw(oldtri.svg, oldtri.drawArguments);
+      updateInputs(this.id);
+    })
+
+    document.getElementById("aLen").addEventListener("change", function(){
+      //document.getElementById("alphaFix").checked = false;
+      oldtri = tri; tri.undraw();
+      fixed = getFixed(this.id);
+      console.log('fixed', fixed);
+
+      if (fixed.alphaFix) {
+        tri = getRightTriangle({
+          alpha: tri.alpha,
+          a: parseFloat(this.value),
+          pos: tri.pos
+        })
+      }
+      if (fixed.thetaFix) {
+        tri = getRightTriangle({
+          theta: tri.theta,
+          a: parseFloat(this.value),
+          pos: tri.pos
+        })
+      }
+      if (fixed.bFix) {
+        tri = getRightTriangle({
+          b: tri.b,
+          a: parseFloat(this.value),
+          pos: tri.pos
+        })
+      }
+      else {
+        tri = getRightTriangle({
+          c: tri.c,
+          a: parseFloat(this.value),
+          pos: tri.pos
+        })
+        console.log(tri);
+      }
+      tri.draw(oldtri.svg, oldtri.drawArguments);
+      updateInputs(this.id);
+    })
+
+    document.getElementById("bLen").addEventListener("change", function(){
+      //document.getElementById("alphaFix").checked = false;
+      oldtri = tri; tri.undraw();
+      fixed = getFixed(this.id);
+      console.log('fixed', fixed);
+
+      if (fixed.alphaFix) {
+        tri = getRightTriangle({
+          alpha: tri.alpha,
+          b: parseFloat(this.value),
+          pos: tri.pos
+        })
+      }
+      if (fixed.thetaFix) {
+        tri = getRightTriangle({
+          theta: tri.theta,
+          b: parseFloat(this.value),
+          pos: tri.pos
+        })
+      }
+      if (fixed.aFix) {
+        tri = getRightTriangle({
+          a: tri.a,
+          b: parseFloat(this.value),
+          pos: tri.pos
+        })
+      }
+      else {
+        tri = getRightTriangle({
+          c: tri.c,
+          b: parseFloat(this.value),
+          pos: tri.pos
+        })
+        console.log(tri);
+      }
+      tri.draw(oldtri.svg, oldtri.drawArguments);
+      updateInputs(this.id);
+    })
+
+    document.getElementById("cLen").addEventListener("change", function(){
+      //document.getElementById("alphaFix").checked = false;
+      oldtri = tri; tri.undraw();
+      fixed = getFixed(this.id);
+      console.log('fixed', fixed);
+
+      if (fixed.alphaFix) {
+        tri = getRightTriangle({
+          alpha: tri.alpha,
+          c: parseFloat(this.value),
+          pos: tri.pos
+        })
+      }
+      if (fixed.thetaFix) {
+        tri = getRightTriangle({
+          theta: tri.theta,
+          c: parseFloat(this.value),
+          pos: tri.pos
+        })
+      }
+      if (fixed.aFix) {
+        tri = getRightTriangle({
+          a: tri.a,
+          c: parseFloat(this.value),
+          pos: tri.pos
+        })
+      }
+      else {
+        tri = getRightTriangle({
+          b: tri.b,
+          c: parseFloat(this.value),
           pos: tri.pos
         })
         console.log(tri);
