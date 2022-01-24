@@ -11,9 +11,12 @@
   </head>
   <body>
 
+    <input type="button" id="copySVG" value="Copy To Clipboard">
+
     <div id="diagram">
+    </div>
       <script type="text/javascript">
-        svg = new uSvgGraph({elementInfo:{width:400,height:300}, axesInfo:{showAxes:false}});
+        svg = new uSvgGraph( {elementInfo:{width:400,height:300}, axesInfo:{showAxes:false}, divId:"diagram"});
 
         let opp = 10;
         let theta = 30 * Math.PI / 180;
@@ -35,7 +38,7 @@
         );
 
       </script>
-    </div>
+
 
     <div id="controls">
       <table>
@@ -382,6 +385,12 @@
     document.getElementById("cLenShow").addEventListener("change", function(){
       tri.drawArguments.labelSides[1] = this.checked;
       redraw();
+    })
+
+    document.getElementById("copySVG").addEventListener("click", function(){
+      contents = document.getElementById("diagram").innerHTML;
+      console.log("contents", contents);
+      navigator.clipboard.writeText(contents);
     })
 
 
